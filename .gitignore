@@ -3,3 +3,7 @@ __pycache__/
 *.pyx
 .env
 .idea/
+# Restore Drill
+.env.restore-drill
+restore-drill/backups/
+restore-drill/reports/

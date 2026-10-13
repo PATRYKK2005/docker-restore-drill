@@ -4,3 +4,7 @@ __pycache__/
 .git/
 .idea/
 .env
+# Restore Drill
+.env.restore-drill
+restore-drill/backups/
+restore-drill/reports/

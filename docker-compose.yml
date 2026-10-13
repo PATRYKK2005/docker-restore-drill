@@ -21,5 +21,48 @@ services:
     ports:
       - "5432:5432"
 
+  source:
+    image: postgres:15-alpine
+    profiles: [ "restore-drill" ]
+    env_file:
+      - .env.restore-drill
+    environment:
+      POSTGRES_USER: drill
+      POSTGRES_DB: drill_source
+    volumes:
+      - drill_source_data:/var/lib/postgresql/data
+    networks:
+      - drill
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U drill -d drill_source" ]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+
+  restore:
+    image: postgres:15-alpine
+    profiles: [ "restore-drill" ]
+    env_file:
+      - .env.restore-drill
+    environment:
+      POSTGRES_USER: drill
+      POSTGRES_DB: drill_restore
+    volumes:
+      - drill_restore_data:/var/lib/postgresql/data
+    networks:
+      - drill
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U drill -d drill_restore" ]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+
 volumes:
   postgres_data:
+  drill_source_data:
+  drill_restore_data:
+
+networks:
+  drill:
